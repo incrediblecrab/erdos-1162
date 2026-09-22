@@ -121,3 +121,7 @@ conference "Paul Erdős and his mathematics", Budapest, July 1999 — problem
 No third-party paper, OEIS page, or API response is redistributed here.
 `refs/fetch.sh` retrieves them; `refs/README.md` records which claim each one
 supports.
+
+The code, data, and prose in this repository are MIT licensed — see
+[`LICENSE`](LICENSE). That covers this work only: the quoted question and any
+material `refs/fetch.sh` downloads remain under their own terms.
