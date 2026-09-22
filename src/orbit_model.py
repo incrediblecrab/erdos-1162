@@ -244,7 +244,10 @@ def holdout_extrapolation(
 
     Predicted A_inf = 3/4 from the orbit model at the top of this file.
     """
-    np = _np()
+    try:
+        np = _np()
+    except ImportError:
+        return {"error": "numpy not installed", "points": 0}
     sel = [r for r in local if r["n"] >= n_min]
     N = np.array([r["n"] for r in sel], dtype=float)
     Y = np.array([r["A_local"] for r in sel])
