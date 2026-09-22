@@ -1,0 +1,151 @@
+final_check.py -- re-deriving every claim in README.md and NOTES.md
+
+== closed forms quoted in NOTES.md ==
+  ok    Galois constant log2(theta/(1/2;1/2)_inf) = 2.882049965   [2.8820499654]
+  ok    theta-law standard deviation = 0.849305961   [0.8493059610]
+  ok    RoTr25 Lemma 2.4 constant zeta_2 < 4   [zeta_2=3.462747]
+
+== elemab.py against the independent permutation brute force ==
+  ok    brute force agrees with the formula for n <= 10   [11 values of n]
+  ok    stored formula rows still reproduce from current elemab.py
+
+== a(n,1) against OEIS A000085 (an independent recurrence) ==
+  ok    a(n,1) = A000085(n) - 1 for 2 <= n <= 30   [a(30,1)=606917269909048575]
+
+== structural identity a(n, floor(n/2)+1) = 0 ==
+  ok    rank_counts(n) has top rank exactly floor(n/2) for n <= 40
+
+== full subgroup lattice against OEIS A005432 / A000638 ==
+  ok    n=1: total subgroups = A005432(1) = 1   [got 1]
+  ok    n=1: conjugacy classes = A000638(1) = 1   [got 1]
+  ok    n=1: lattice elementary abelian ranks = elemab.py   [lattice [1] vs formula [1]]
+  ok    n=2: total subgroups = A005432(2) = 2   [got 2]
+  ok    n=2: conjugacy classes = A000638(2) = 2   [got 2]
+  ok    n=2: lattice elementary abelian ranks = elemab.py   [lattice [1, 1] vs formula [1, 1]]
+  ok    n=3: total subgroups = A005432(3) = 6   [got 6]
+  ok    n=3: conjugacy classes = A000638(3) = 4   [got 4]
+  ok    n=3: lattice elementary abelian ranks = elemab.py   [lattice [1, 3] vs formula [1, 3]]
+  ok    n=4: total subgroups = A005432(4) = 30   [got 30]
+  ok    n=4: conjugacy classes = A000638(4) = 11   [got 11]
+  ok    n=4: lattice elementary abelian ranks = elemab.py   [lattice [1, 9, 4] vs formula [1, 9, 4]]
+  ok    n=5: total subgroups = A005432(5) = 156   [got 156]
+  ok    n=5: conjugacy classes = A000638(5) = 19   [got 19]
+  ok    n=5: lattice elementary abelian ranks = elemab.py   [lattice [1, 25, 20] vs formula [1, 25, 20]]
+  ok    n=6: total subgroups = A005432(6) = 1455   [got 1455]
+  ok    n=6: conjugacy classes = A000638(6) = 56   [got 56]
+  ok    n=6: lattice elementary abelian ranks = elemab.py   [lattice [1, 75, 165, 30] vs formula [1, 75, 165, 30]]
+  ok    n=7: total subgroups = A005432(7) = 11300   [got 11300]
+  ok    n=7: conjugacy classes = A000638(7) = 96   [got 96]
+  ok    n=7: lattice elementary abelian ranks = elemab.py   [lattice [1, 231, 875, 210] vs formula [1, 231, 875, 210]]
+  ok    n=8: total subgroups = A005432(8) = 151221   [got 151221]
+  ok    n=8: conjugacy classes = A000638(8) = 296   [got 296]
+  ok    n=8: lattice elementary abelian ranks = elemab.py   [lattice [1, 763, 6685, 4440, 350] vs formula [1, 763, 6685, 4440, 350]]
+
+== pure orbit-type closed form against brute-forced hom counts ==
+  ok    15 brute-forced hom counts match pure_type_log2
+
+== orbit model: optimal rank of each pure type is j/2^(j+1) ==
+  ok    n=128 orbit size 2: best k/n = 0.25   [got 0.25]
+  ok    n=128 orbit size 4: best k/n = 0.25   [got 0.25]
+  ok    n=128 orbit size 8: best k/n = 0.1875   [got 0.1875]
+  ok    n=128 orbit size 16: best k/n = 0.125   [got 0.125]
+  ok    n=256 orbit size 2: best k/n = 0.25   [got 0.25]
+  ok    n=256 orbit size 4: best k/n = 0.25   [got 0.25]
+  ok    n=256 orbit size 8: best k/n = 0.1875   [got 0.1875]
+  ok    n=256 orbit size 16: best k/n = 0.125   [got 0.125]
+  ok    n=128 orbit size 2 reaches n^2/16 up to O(n log n)   [excess +358.0 vs n log2 n = 896]
+  ok    n=128 orbit size 2: excess/(n log2 n) below its limit 0.5   [0.39951]
+  ok    n=128 orbit size 4 reaches n^2/16 up to O(n log n)   [excess +453.6 vs n log2 n = 896]
+  ok    n=128 orbit size 4: excess/(n log2 n) below its limit 0.75   [0.50622]
+  ok    n=128: orbit size 4 beats orbit size 2 at order n log n   [0.50622 vs 0.39951]
+  ok    n=128: orbit size 8 falls behind orbit size 4 at order n^2   [gap 394.1, gap/n^2 = 0.02406, limit 7/256 = 0.02734]
+  ok    n=256 orbit size 2 reaches n^2/16 up to O(n log n)   [excess +841.6 vs n log2 n = 2048]
+  ok    n=256 orbit size 2: excess/(n log2 n) below its limit 0.5   [0.41095]
+  ok    n=256 orbit size 4 reaches n^2/16 up to O(n log n)   [excess +1096.4 vs n log2 n = 2048]
+  ok    n=256 orbit size 4: excess/(n log2 n) below its limit 0.75   [0.53533]
+  ok    n=256: orbit size 4 beats orbit size 2 at order n log n   [0.53533 vs 0.41095]
+  ok    n=256: orbit size 8 falls behind orbit size 4 at order n^2   [gap 1652.8, gap/n^2 = 0.02522, limit 7/256 = 0.02734]
+
+== pointwise theta law  a(n, n/4+j)/a(n, n/4) -> 2^(-j^2) ==
+  ok    ratios match 2^(-j^2) for |j| <= 3 at n = 64 and 128   [max deviation 1.47e-04]
+  ok    n=128: mode of the rank distribution is exactly n/4 = 32   [got 32]
+  ok    n=128: mean rank / n = 0.25 to 6 dp   [0.25000000]
+  ok    n=128: sd of the rank equals the theta constant to 6 dp   [measured 0.84930597 vs 0.84930596]
+  ok    n=128: >= 1-1e-6 of the mass lies within 4 of the mode   [window 4]
+  ok    n=256: mode of the rank distribution is exactly n/4 = 64   [got 64]
+  ok    n=256: mean rank / n = 0.25 to 6 dp   [0.25000000]
+  ok    n=256: sd of the rank equals the theta constant to 6 dp   [measured 0.84930596 vs 0.84930596]
+  ok    n=256: >= 1-1e-6 of the mass lies within 4 of the mode   [window 4]
+  ok    n=512: mode of the rank distribution is exactly n/4 = 128   [got 128]
+  ok    n=512: mean rank / n = 0.25 to 6 dp   [0.25000000]
+  ok    n=512: sd of the rank equals the theta constant to 6 dp   [measured 0.84930596 vs 0.84930596]
+  ok    n=512: >= 1-1e-6 of the mass lies within 4 of the mode   [window 4]
+
+== Galois numbers  log2 G_r - r^2/4 -> the same constant ==
+  ok    r=32: deviation from the constant is below 2^(3-r/2)   [dev 5.236e-05 < 1.221e-04]
+  ok    r=64: deviation from the constant is below 2^(3-r/2)   [dev 7.990e-10 < 1.863e-09]
+  ok    r=128 (even): excess = 2.882049965   [2.882049965425]
+  ok    r=256 (even): excess = 2.882049965   [2.882049965425]
+  ok    r=512 (even): excess = 2.882049965   [2.882049965425]
+  ok    r=63 (odd): excess within 4e-6 of the even limit   [2.882046185]
+  ok    r=127 (odd): excess within 4e-6 of the even limit   [2.882046186]
+  ok    r=255 (odd): excess within 4e-6 of the even limit   [2.882046186]
+  ok    r=511 (odd): excess within 4e-6 of the even limit   [2.882046186]
+  ok    fresh galois_number(256) reproduces the constant   [2.882049965425]
+  ok    G_0..G_8 = OEIS A006116
+  ok    n=256: one maximal elementary abelian gives n^2/16 + O(1)   [excess 2.882049965425]
+  ok    n=512: one maximal elementary abelian gives n^2/16 + O(1)   [excess 2.882049965425]
+
+== second-order term: A_local -> 3/4, scored out of sample ==
+  ok    n^-1/2 is the best extrapolation basis on held-out n   [won: n^-1/2 (held-out maxres 6.75e-05)]
+  ok    free exponent selected out of sample is near 1/2   [p=0.48]
+  ok    extrapolated A_inf = 3/4 to within 0.002   [A_inf=0.75057, error 0.00057]
+  ok    the rejected 1/log2 n model extrapolates to the wrong limit   [A_inf=0.78532]
+
+== orbit profile at the dominant rank k = n/4 ==
+  ok    n=64: sum_m m*E[#orbits_m] = n exactly   [error 3.4e-13]
+  ok    n=64: orbits of size 4 hold the majority of points   [fraction 0.735008]
+  ok    n=64: orbits of size >= 8 are negligible   [1.05e-04]
+  ok    n=128: sum_m m*E[#orbits_m] = n exactly   [error 4.2e-12]
+  ok    n=128: orbits of size 4 hold the majority of points   [fraction 0.804914]
+  ok    n=128: orbits of size >= 8 are negligible   [3.99e-09]
+  ok    n=128: the size-4 fraction increased   [0.7350 -> 0.8049]
+  ok    n=256: sum_m m*E[#orbits_m] = n exactly   [error 1.9e-10]
+  ok    n=256: orbits of size 4 hold the majority of points   [fraction 0.857902]
+  ok    n=256: orbits of size >= 8 are negligible   [2.15e-18]
+  ok    n=256: the size-4 fraction increased   [0.8049 -> 0.8579]
+  ok    n=512: sum_m m*E[#orbits_m] = n exactly   [error 1.4e-09]
+  ok    n=512: orbits of size 4 hold the majority of points   [fraction 0.897348]
+  ok    n=512: orbits of size >= 8 are negligible   [2.57e-37]
+  ok    n=512: the size-4 fraction increased   [0.8579 -> 0.8973]
+
+== rank sd vs closed form, exact arithmetic at 60 dp ==
+  ok    closed form printed to 30 dp is 0.849305961022908280743697585694   [0.849305961022908280743697585694]
+  ok    n=64: exact sd agrees with the closed form to >= 4 dp   [4 dp, |err| 4.72e-5]
+  ok    n=128: exact sd agrees with the closed form to >= 7 dp   [7 dp, |err| 7.96e-9]
+  ok    n=256: exact sd agrees with the closed form to >= 15 dp   [16 dp, |err| 1.05e-17]
+  ok    n=512: exact sd agrees with the closed form to >= 30 dp   [35 dp, |err| 2.71e-36]
+  ok    n=512: all 30 printed digits of the sd match the closed form   [0.849305961022908280743697585694]
+  ok    log10(error) roughly doubles per doubling of n (error ~ 2^-cn)   [ratios [1.87, 2.1, 2.09]]
+
+== RoTr25 Theorem 6 threshold algebra ==
+  ok    nu(1-nu) = 1/16 has smaller root 1/2 - sqrt(3)/4 = 0.0669872981   [0.0669872981078]
+  ok    that root is the constant printed in Theorem 6
+  ok    nu(1/2 - nu) = 1/16 has discriminant exactly 0   [0.0]
+  ok    its double root is 1/4   [0.25]
+  ok    improvement factors are 4.000 and 3.732   [4.000 and 3.732]
+
+== verbatim quotations from the primary source ==
+  ok    quote present: "our logarithms are to the base 2"
+  ok    quote present: "settling a conjecture of Pyber from 1993"
+  ok    quote present: "A random nilpotent subgroup of Sn is a 2-group"
+  ok    quote present: "Let n be congruent to 3 modulo 4"
+  ok    quote present: "the probability that a random subgroup of Sn is nilpoten"
+  ok    quote present: "an elementary abelian 2-section of order at least 2"
+  ok    quote present: "Since ν(1 − ν) < 1/16, the result follows"
+  ok    quote present: "Since µ < 1/16 the result follows from the lower bound i"
+  ok    quote present: "P has at most ζppk(ℓ−k) subgroups of order pk"
+
+118 checks run, 0 failed
+
+All stated numbers reproduced.
