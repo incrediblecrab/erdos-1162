@@ -1,26 +1,16 @@
 # Erdős problem #1162 — working notes
 
-> **Give an asymptotic formula for the number of subgroups of $S_n$. Is there a
-> statistical theorem on their order?**
-> — a problem of Erdős and Turán, source [Va99, 5.73]
+> **Give an asymptotic formula for the number of subgroups of $S_n$. Is there a statistical theorem on their order?** — a problem of Erdős and Turán, source [Va99, 5.73]
 
-**Status: open. Nothing here solves it.** The tracker records the problem as
-`OPEN` with the note *"This is open, and cannot be resolved with a finite
-computation."* That is correct, and no computation below is offered as a proof
-of an asymptotic statement.
+**Status: open. Nothing here solves it.** The tracker records the problem as `OPEN` with the note *"This is open, and cannot be resolved with a finite computation."* That is correct, and no computation below is offered as a proof of an asymptotic statement.
 
 What this directory does contain:
 
-1. a correction to an ambiguity in the problem statement as displayed
-   (§1: the logarithm is base 2);
-2. exact counts, far past the published ranges, of the family of subgroups
-   that carries the whole first-order answer (§2–§3);
+1. a correction to an ambiguity in the problem statement as displayed (§1: the logarithm is base 2);
+2. exact counts, far past the published ranges, of the family of subgroups that carries the whole first-order answer (§2–§3);
 3. two limiting constants identified in closed form and confirmed to 9–12 decimal places (§3, §4; the first version pointed to §4, §5, but §5 is a table of lower bounds);
-4. a second-order term derived from the orbit structure and confirmed by
-   out-of-sample extrapolation (§6);
-5. an exactly located lossy step in the one published theorem that addresses
-   the *second* half of Erdős's question, and a conjecture for what replaces
-   it (§7);
+4. a second-order term derived from the orbit structure and confirmed by out-of-sample extrapolation (§6);
+5. an exactly located lossy step in the one published theorem that addresses the *second* half of Erdős's question, and a conjecture for what replaces it (§7);
 6. the evidence that does **not** support the conjecture, stated plainly (§8);
 7. a second, larger family, Frattini-closed 2-subgroups with every orbit of size at most 8, counted exactly to $n = 512$, and two short proofs: $\log_2 f(n) \ge n^2/16 + \tfrac78 n\log_2 n - O(n)$, and $e(n)/f(n) \to 0$. The second means the elementary abelian family of items 2–5 is not typical. Conjecture 7.2 is withdrawn in consequence and replaced by Conjecture 9.3, which puts a typical subgroup at $2^{3n/8}$ rather than $2^{n/4}$ (§9).
 
@@ -30,25 +20,16 @@ What this directory does contain:
 
 ## 1. The statement: which logarithm?
 
-The problem page states Pyber's result as `log f(n) ≍ n²` and
-Roney-Dougal–Tracey's as `log f(n) = (1/16 + o(1))n²` without fixing a base,
-and the constant 1/16 is meaningless without one.
+The problem page states Pyber's result as `log f(n) ≍ n²` and Roney-Dougal–Tracey's as `log f(n) = (1/16 + o(1))n²` without fixing a base, and the constant 1/16 is meaningless without one.
 
-It is base 2. From page 1 of [RoTr25], read both from `pdftotext -raw` and
-from a 150 dpi render of the page:
+It is base 2. From page 1 of [RoTr25], read both from `pdftotext -raw` and from a 150 dpi render of the page:
 
-> "|Sub(S_n)| of subgroups of S_n is at most 2^{ξn²+o(n²)} where ξ = ⅙ log 24
-> (our logarithms are to the base 2). Pyber conjectured, however, that
+> "|Sub(S_n)| of subgroups of S_n is at most 2^{ξn²+o(n²)} where ξ = ⅙ log 24 (our logarithms are to the base 2). Pyber conjectured, however, that
 > |Sub(S_n)| = 2^{n²/16+o(n²)}."
 
-Independently, the OEIS A005432 comment records Pyber's brackets as
-`c^{n²(1+o(1))} ≤ a(n) ≤ d^{n²(1+o(1))}` with `c = 2^{1/16}`, `d = 24^{1/6}`,
-which is the same statement with the base made explicit.
+Independently, the OEIS A005432 comment records Pyber's brackets as `c^{n²(1+o(1))} ≤ a(n) ≤ d^{n²(1+o(1))}` with `c = 2^{1/16}`, `d = 24^{1/6}`, which is the same statement with the base made explicit.
 
-*(The default and `-layout` modes of `pdftotext` both sort text by position
-and splice superscripts from the displayed math into this sentence — it comes
-out as "are to the 2 2 base 2)" — so a verbatim search against them fails even
-though the sentence is on the page. `src/final_check.py` uses `-raw`.)*
+*(The default and `-layout` modes of `pdftotext` both sort text by position and splice superscripts from the displayed math into this sentence — it comes out as "are to the 2 2 base 2)" — so a verbatim search against them fails even though the sentence is on the page. `src/final_check.py` uses `-raw`.)*
 
 **All logarithms in these notes are base 2.**
 
@@ -63,43 +44,26 @@ though the sentence is on the page. `src/final_check.py` uses `-raw`.)*
 
 ### 2.1 The full subgroup lattice, $n \le 8$
 
-`src/subgroups.c` enumerates every subgroup of $S_n$ by expanding one
-representative per conjugacy class and closing under conjugation.
+`src/subgroups.c` enumerates every subgroup of $S_n$ by expanding one representative per conjugacy class and closing under conjugation.
 
 | $n$ | subgroups $f(n)$ | classes | agrees with |
 | --- | --- | --- | --- |
 | 1–7 | 1, 2, 6, 30, 156, 1455, 11300 | 1, 2, 4, 11, 19, 56, 96 | A005432 / A000638 |
 | 8 | 151221 | 296 | A005432(8) / A000638(8) |
 
-$n=8$ took 883 s. This is ground truth for the *actual* object of #1162 — the
-full multiset of subgroup orders — and it is the anchor that the much larger
-elementary abelian computation is checked against.
+$n=8$ took 883 s. This is ground truth for the *actual* object of #1162 — the full multiset of subgroup orders — and it is the anchor that the much larger elementary abelian computation is checked against.
 
-**A wrong version of this program is preserved in the history of this
-directory and is worth recording.** The first attempt pruned with a "covered"
-set, marking `⟨H,g⟩` covered for each new generator `g`. It produced
-1, 2, 6, 30, **144, 1066, 6415** — wrong from $n=5$ on, 43 % low at $n=7$ —
-because if `g ∈ ⟨H,g'⟩` for an earlier `g'`, then `⟨H,g⟩` may still be a
-different and *smaller* subgroup, so genuine minimal overgroups were dropped.
-The rewrite prunes by right cosets instead (`⟨H,g⟩ = ⟨H,hg⟩` for `h ∈ H`, so
-the whole coset `Hg` may be skipped), which is sound. The error was invisible
-by inspection and was caught only by comparing against OEIS.
+**A wrong version of this program is preserved in the history of this directory and is worth recording.** The first attempt pruned with a "covered" set, marking `⟨H,g⟩` covered for each new generator `g`. It produced 1, 2, 6, 30, **144, 1066, 6415** — wrong from $n=5$ on, 43 % low at $n=7$ — because if `g ∈ ⟨H,g'⟩` for an earlier `g'`, then `⟨H,g⟩` may still be a different and *smaller* subgroup, so genuine minimal overgroups were dropped. The rewrite prunes by right cosets instead (`⟨H,g⟩ = ⟨H,hg⟩` for `h ∈ H`, so the whole coset `Hg` may be skipped), which is sound. The error was invisible by inspection and was caught only by comparing against OEIS.
 
 ### 2.2 Elementary abelian 2-subgroups, $n \le 512$
 
-Write $a(n,k) = \#\{H \le S_n : H \cong (\mathbb{Z}/2)^k\}$ and
-$e(n) = \sum_k a(n,k)$. `src/elemab.py` computes these exactly:
+Write $a(n,k) = \#\{H \le S_n : H \cong (\mathbb{Z}/2)^k\}$ and $e(n) = \sum_k a(n,k)$. `src/elemab.py` computes these exactly:
 
-* $\#\mathrm{Hom}(G,S_n) = n!\,[x^n]\exp\!\big(\sum_{H\le G} x^{[G:H]}/[G:H]\big)$;
-  for $G=\mathbb{F}_2^k$ the index-$2^j$ subgroups are the codimension-$j$
-  subspaces, so $a_{2^j} = \binom{k}{j}_2 (2^j-1)!$ and only $j \le \log_2 n$
-  contribute — each coefficient costs $O(\log n)$ big-integer multiplications;
-* $\#\mathrm{Inj}$ from $\#\mathrm{Hom}$ by $q$-binomial inversion at $q=2$,
-  $i_k = \sum_m (-1)^{k-m} 2^{\binom{k-m}{2}} \binom{k}{m}_2 h_m$;
+* $\#\mathrm{Hom}(G,S_n) = n!\,[x^n]\exp\!\big(\sum_{H\le G} x^{[G:H]}/[G:H]\big)$; for $G=\mathbb{F}_2^k$ the index-$2^j$ subgroups are the codimension-$j$ subspaces, so $a_{2^j} = \binom{k}{j}_2 (2^j-1)!$ and only $j \le \log_2 n$ contribute — each coefficient costs $O(\log n)$ big-integer multiplications;
+* $\#\mathrm{Inj}$ from $\#\mathrm{Hom}$ by $q$-binomial inversion at $q=2$, $i_k = \sum_m (-1)^{k-m} 2^{\binom{k-m}{2}} \binom{k}{m}_2 h_m$;
 * $a(n,k) = i_k / |\mathrm{GL}_k(2)|$.
 
-For example `rank_counts(8) = [1, 763, 6685, 4440, 350]`, and $e(512)$ is an
-exact integer of 18 997 bits.
+For example `rank_counts(8) = [1, 763, 6685, 4440, 350]`, and $e(512)$ is an exact integer of 18 997 bits.
 
 **Why this family.** It is not a proxy chosen for convenience: it already carries the entire first-order answer. $\log e(n) = n^2/16 + \Theta(n\log n)$ (§6), and $\log f(n) = n^2/16 + o(n^2)$, so elementary abelian 2-subgroups account for all of the leading term. §8 records what that does *not* imply, and §9.5 proves the gap is real: $e(n)/f(n) \to 0$, so the family carries the leading term without being typical.
 
@@ -116,8 +80,7 @@ Four independent paths, all agreeing:
 
 ## 3. The rank distribution: an exact statistical theorem for this family
 
-For each $n \le 512$ the distribution $k \mapsto a(n,k)/e(n)$ is known exactly,
-so the following are *computations*, not estimates:
+For each $n \le 512$ the distribution $k \mapsto a(n,k)/e(n)$ is known exactly, so the following are *computations*, not estimates:
 
 | $n$ | mode | mean$/n$ | sd | window holding $\ge 1-10^{-6}$ |
 | --- | --- | --- | --- | --- |
@@ -126,10 +89,7 @@ so the following are *computations*, not estimates:
 | 256 | 64 | 0.250000 | 0.849306 | $\pm 4$ |
 | 512 | 128 | 0.250000 | 0.849306 | $\pm 4$ |
 
-The mode is exactly $n/4$ for every $n \equiv 0 \pmod 4$ tested from 32 up.
-**The width does not grow with $n$**: the standard deviation converges to an
-absolute constant and the $1-10^{-6}$ window stays at $\pm 4$ while $n$ grows
-by a factor of 8.
+The mode is exactly $n/4$ for every $n \equiv 0 \pmod 4$ tested from 32 up. **The width does not grow with $n$**: the standard deviation converges to an absolute constant and the $1-10^{-6}$ window stays at $\pm 4$ while $n$ grows by a factor of 8.
 
 The limit law is identified in closed form. For $n \equiv 0 \pmod 4$,
 
@@ -157,12 +117,7 @@ The first version printed 1.1e−17 for $n = 256$, from rounding the stored 1.05
 
 At $n=512$ the exact standard deviation agrees with $0.849305961022908280743697585694$ in all 30 digits shown. The error is roughly squaring at each doubling of $n$ — the $\log_{10}$ errors are $-4.3, -8.1, -17.0, -35.6$, ratios $1.87, 2.10, 2.09$ — i.e. it decays like $2^{-cn}$ with $c \approx 0.23$, not polynomially. §9.3 argues, but does not prove, that the error is of order $n^2 2^{-n/4}$. Under that rate the apparent $c$ between $n$ and $2n$ would be $1/4 - 2/n$, which is 0.219, 0.234 and 0.242 for $n = 64, 128, 256$; the measured values are 0.196, 0.230 and 0.241. That is consistent with $c \to 1/4$ but does not establish it. The first version printed the last of the three ratios as 2.10; it is 2.0947.
 
-Two cautions. The deviations read off the stored doubles instead
-(2.8e−10 at $n=256$, 1.2e−9 at $n=512$, and non-monotone) are **float noise
-in the artifact, not convergence error**; I reported them as convergence
-before checking, and they are wrong. And this is convergence of an exact
-finite quantity to a closed form, checked at four values of $n$ — it is
-extremely strong numerical evidence, but it is not a proof.
+Two cautions. The deviations read off the stored doubles instead (2.8e−10 at $n=256$, 1.2e−9 at $n=512$, and non-monotone) are **float noise in the artifact, not convergence error**; I reported them as convergence before checking, and they are wrong. And this is convergence of an exact finite quantity to a closed form, checked at four values of $n$ — it is extremely strong numerical evidence, but it is not a proof.
 
 **Where it comes from.** $a(n, n/4+j)$ behaves like $2^{nk/2-k^2}$ near $k=n/4$ (§6), and putting $k = n/4+j$ gives $n^2/16 - j^2$: the quadratic in $k$ has its vertex at $n/4$, and the $2^{-j^2}$ profile is exactly the same mechanism that makes $\binom{r}{r/2+j}_2 \approx 2^{r^2/4-j^2}$. §9.3 makes this literal: numerically the rank law is that of the dimension of a uniformly random subspace of $\mathbb{F}_2^{\lfloor n/2\rfloor}$, to a total variation distance of order $n^2 2^{-n/4}$.
 
@@ -170,23 +125,16 @@ So, **for this family**, the answer to the second half of #1162 is sharp: $\log_
 
 ## 4. A single maximal elementary abelian is not enough
 
-The classical Pyber lower bound takes one maximal elementary abelian
-$E \cong \mathbb{F}_2^{\lfloor n/2\rfloor}$ and counts its subspaces, giving
-the Galois number $G_{\lfloor n/2\rfloor}$. Exactly:
+The classical Pyber lower bound takes one maximal elementary abelian $E \cong \mathbb{F}_2^{\lfloor n/2\rfloor}$ and counts its subspaces, giving the Galois number $G_{\lfloor n/2\rfloor}$. Exactly:
 
 $$\log_2 G_r - \frac{r^2}{4} \longrightarrow \log_2\!\frac{\vartheta}{\eta} = 2.8820499654\ldots \ (r \text{ even}),
 \qquad \vartheta=\sum_{j\in\mathbb{Z}}2^{-j^2},\quad \eta=\prod_{i\ge1}(1-2^{-i}).$$
 
 For odd $r$ the limit is $\log_2(\vartheta'/\eta) = 2.8820461863\ldots$, with $\vartheta' = \sum_{j\in\mathbb{Z}}2^{-(j+1/2)^2} = 2.1289312505\ldots$ in place of $\vartheta = 2.1289368272\ldots$; here $\eta = 0.2887880951\ldots$ and $\vartheta/\eta = 7.372$. Measured: $2.882049965$ at $r = 128, 256, 512$ (even) and $2.882046186$ at $r = 127, 255, 511$ (odd), stable to 9 decimals; the deviation from the closed form falls like $2^{-r/2}$ ($5.2\times10^{-5}$ at $r=32$, $8.0\times10^{-10}$ at $r=64$). The first version gave only the even limit and quoted the odd measurement beside it as if it converged to the same constant; the two limits differ by $3.8\times10^{-6}$.
 
-$\eta^{-1} = 3.46275\ldots$ is exactly the constant $\zeta_2$ of [RoTr25]
-Lemma 2.4 ("$P$ has at most $\zeta_p p^{k(\ell-k)}$ subgroups of order $p^k$
-… $\zeta_p < 4$").
+$\eta^{-1} = 3.46275\ldots$ is exactly the constant $\zeta_2$ of [RoTr25] Lemma 2.4 ("$P$ has at most $\zeta_p p^{k(\ell-k)}$ subgroups of order $p^k$ … $\zeta_p < 4$").
 
-**Consequence.** One maximal $E$ contributes $n^2/16 + O(1)$ — a *bounded*
-excess. So the entire $\alpha n\log n$ of [RoTr25] Theorem 1's lower bound
-comes from the multiplicity of elementary abelian subgroups, not from any
-single one.
+**Consequence.** One maximal $E$ contributes $n^2/16 + O(1)$ — a *bounded* excess. So the entire $\alpha n\log n$ of [RoTr25] Theorem 1's lower bound comes from the multiplicity of elementary abelian subgroups, not from any single one.
 
 ## 5. An explicit lower bound for the constant $\alpha$
 
@@ -202,10 +150,7 @@ The $n = 128$ entry of the first row read 0.5276 in the first version; the value
 
 ## 6. The second-order term is $\tfrac34 n\log_2 n$
 
-**Derivation (orbit structure).** Let $\mathbb{F}_2^k$ act on $[n]$ with every
-orbit of size $m=2^j$. Exactly
-$N_j(n,k) = \frac{n!}{t!}\big(\binom{k}{j}_2/m\big)^t$ with $t=n/m$, and
-dividing by $|\mathrm{GL}_k(2)|$,
+**Derivation (orbit structure).** Let $\mathbb{F}_2^k$ act on $[n]$ with every orbit of size $m=2^j$. Exactly $N_j(n,k) = \frac{n!}{t!}\big(\binom{k}{j}_2/m\big)^t$ with $t=n/m$, and dividing by $|\mathrm{GL}_k(2)|$,
 
 $$\log_2 \frac{N_j(n,k)}{|\mathrm{GL}_k(2)|} = (1-2^{-j})\,n\log_2 n \;+\; \frac{jkn}{2^j} - k^2 \;+\; O_j(n).$$
 
@@ -218,13 +163,7 @@ Maximising the $n^2$ part gives $k = jn/2^{j+1}$ with value $j^2n^2/2^{2j+2}$:
 | 3 | 8 | 3/16 | 9/256 | 7/8 |
 | 4 | 16 | 1/8 | 1/64 | 15/16 |
 
-Sizes 2 and 4 **tie** at the leading constant $1/16$ — the constant of Pyber
-and of Theorem 1 — and size 4 wins the tie-break at order $n\log n$. Mixtures
-do not help: with $c_j$ the fraction of points in orbits of size $2^j$, the
-$n^2$ coefficient is $\kappa\sum_j c_j j2^{-j} - \kappa^2$ and
-$\sum_j c_j j 2^{-j} \le 1/2$ with equality iff $c_j$ is supported on
-$\{1,2\}$; on that face the $n\log n$ coefficient is $1/2 + c_2/4$, maximised
-at $c_2=1$. Hence
+Sizes 2 and 4 **tie** at the leading constant $1/16$ — the constant of Pyber and of Theorem 1 — and size 4 wins the tie-break at order $n\log n$. Mixtures do not help: with $c_j$ the fraction of points in orbits of size $2^j$, the $n^2$ coefficient is $\kappa\sum_j c_j j2^{-j} - \kappa^2$ and $\sum_j c_j j 2^{-j} \le 1/2$ with equality iff $c_j$ is supported on $\{1,2\}$; on that face the $n\log n$ coefficient is $1/2 + c_2/4$, maximised at $c_2=1$. Hence
 
 $$\log_2 e(n) = \frac{n^2}{16} + \frac34 n\log_2 n + O(n).$$
 
@@ -232,9 +171,7 @@ $$\log_2 e(n) = \frac{n^2}{16} + \frac34 n\log_2 n + O(n).$$
 
 **Check 1 — the closed form.** `pure_type_log2` was validated against 15 brute-forced hom counts (every $(n,k,j)$ with $j \ge 1$, $2^j \mid n$, and either $n \in \{4,6\}$, $1 \le k \le 3$ or $n = 8$, $1 \le k \le 2$), exact match. The first version said "all $(n,k,j)$ with $n\le 8$, $k\le3$", which is more than was brute-forced. Its optimal rank equals the predicted $j/2^{j+1}$ *exactly* in every case tested ($j=1,2,3,4$; $n=64,128,256$), and the measured $\mathrm{excess}/(n\log_2 n)$ approaches $1-2^{-j}$ with an $O(n)$ correction whose size is confirmed constant after multiplying by $\log_2 n$: the values of $(1 - 2^{-j} - \mathrm{excess}/(n\log_2 n))\log_2 n$ at $n = 64, 128, 256$ are 0.686, 0.703, 0.712 for $j=1$ and 1.685, 1.706, 1.717 for $j=2$. The first version printed 0.687 and 0.713 for $j = 1$; the values are 0.68558 and 0.71240.
 
-**Check 2 — the orbit profile.** Exactly,
-$\mathbb{E}[\#\text{orbits of size }m] = \binom{n}{m}a_m h_k(n-m)/h_k(n)$.
-At $k=n/4$ the expected fraction of points in orbits of size 4 is
+**Check 2 — the orbit profile.** Exactly, $\mathbb{E}[\#\text{orbits of size }m] = \binom{n}{m}a_m h_k(n-m)/h_k(n)$. At $k=n/4$ the expected fraction of points in orbits of size 4 is
 
 | $n$ | 64 | 128 | 256 | 512 |
 | --- | --- | --- | --- | --- |
@@ -242,16 +179,11 @@ At $k=n/4$ the expected fraction of points in orbits of size 4 is
 | size 2 | 0.264883 | 0.195086 | 0.142098 | 0.102652 |
 | size $\ge 8$ | $1.0\times10^{-4}$ | $4.0\times10^{-9}$ | $2.2\times10^{-18}$ | $2.6\times10^{-37}$ |
 
-rising toward 1 with the residual entirely on size 2, exactly as the mixture
-argument predicts. (`src/final_check.py` verifies $\sum_m m\,\mathbb{E}[\#\text{orbits}_m]=n$ as an arithmetic self-check to within $2\times10^{-9}$; the largest error is $1.4\times10^{-9}$, at $n = 512$, from rounding in the float logarithms that `ratio` uses. The first version said $10^{-9}$, which the check did not enforce: it allowed $10^{-6}n$.)
+rising toward 1 with the residual entirely on size 2, exactly as the mixture argument predicts. (`src/final_check.py` verifies $\sum_m m\,\mathbb{E}[\#\text{orbits}_m]=n$ as an arithmetic self-check to within $2\times10^{-9}$; the largest error is $1.4\times10^{-9}$, at $n = 512$, from rounding in the float logarithms that `ratio` uses. The first version said $10^{-9}$, which the check did not enforce: it allowed $10^{-6}n$.)
 
 The first version printed $1.1\times10^{-4}$ for size $\ge 8$ at $n = 64$; the value is $1.049\times10^{-4}$.
 
-**Check 3 — out-of-sample extrapolation.** A direct fit is not enough:
-$A$ converges slowly, and a basis chosen by in-sample fit proves nothing when
-seven candidate shapes are available. So $A_{\text{local}}(n)$ was measured by
-second differences (which annihilate the $Bn+C$ terms exactly), fitted on
-$n\in[96,296]$ only, and scored on $n\in[400,496]$, which no fit ever saw:
+**Check 3 — out-of-sample extrapolation.** A direct fit is not enough: $A$ converges slowly, and a basis chosen by in-sample fit proves nothing when seven candidate shapes are available. So $A_{\text{local}}(n)$ was measured by second differences (which annihilate the $Bn+C$ terms exactly), fitted on $n\in[96,296]$ only, and scored on $n\in[400,496]$, which no fit ever saw:
 
 | basis | $A_\infty$ | train max-res | **held-out max-res** |
 | --- | --- | --- | --- |
@@ -263,9 +195,7 @@ $n\in[96,296]$ only, and scored on $n\in[400,496]$, which no fit ever saw:
 | $n^{-1/2}\log_2 n$ | 0.76416 | 4.5e−4 | 1.2e−3 |
 | $n^{-1}$ | 0.73823 | 7.3e−4 | 1.9e−3 |
 
-Scanning a free exponent $p$ in $A_\infty + cn^{-p}$ the same way selects
-$p = 0.48$ and $A_\infty = \mathbf{0.75057}$, within $5.7\times10^{-4}$ of the
-predicted $3/4$, held-out max residual $1.6\times10^{-5}$.
+Scanning a free exponent $p$ in $A_\infty + cn^{-p}$ the same way selects $p = 0.48$ and $A_\infty = \mathbf{0.75057}$, within $5.7\times10^{-4}$ of the predicted $3/4$, held-out max residual $1.6\times10^{-5}$.
 
 The first version of the table printed the held-out residuals of $n^{-1/2}$ and $n^{-1/2}\log_2 n$ as 6.8e−5 and 1.3e−3; the values are $6.749\times10^{-5}$ and $1.248\times10^{-3}$. The ranking is unchanged.
 
@@ -275,54 +205,32 @@ The first version of the table printed the held-out residuals of $n^{-1/2}$ and 
 
 Theorem 6 is the only published result addressing the second half of #1162:
 
-> "Let µ be a real number in [0, 1/16) and let ν be a real number in
-> [0, ½ − √3⁄4). Then a random subgroup of S_n has an elementary abelian
-> 2-section of order at least 2^{µn}, and a Sylow 2-subgroup of order at
-> least 2^{νn}."
+> "Let µ be a real number in [0, 1/16) and let ν be a real number in [0, ½ − √3⁄4). Then a random subgroup of S_n has an elementary abelian 2-section of order at least 2^{µn}, and a Sylow 2-subgroup of order at least 2^{νn}."
 
 Both constants come from the same place. From the proof (p. 35):
 
-> "use Lemma 2.4(i) to see that the number of R-subgroups of a Sylow
-> 2-subgroup of S_n is at most 4·2^{νn(n−νn)} … Since ν(1 − ν) < 1/16, the
-> result follows"
+> "use Lemma 2.4(i) to see that the number of R-subgroups of a Sylow 2-subgroup of S_n is at most 4·2^{νn(n−νn)} … Since ν(1 − ν) < 1/16, the result follows"
 
 and for the section, "Since µ < 1/16 the result follows from the lower bound in Theorem 1". Solving $\nu(1-\nu) = 1/16$ gives $\nu = \tfrac12 - \tfrac{\sqrt3}{4} = 0.06698729810778\ldots$, which is their printed constant exactly — so this is the binding step, not a by-product. The first version said this reproduced the constant "to 25 digits"; the paper prints the closed form $\tfrac12 - \tfrac{\sqrt3}{4}$, so the agreement is algebraic and a digit count adds nothing.
 
-**The lossy step.** Lemma 2.4(i) is applied to a Sylow 2-subgroup of $S_n$,
-of order $2^{\ell}$ with $\ell = n - s_2(n) \approx n$. The bound
-$\zeta_2 2^{k(\ell-k)}$ is attained only when the ambient group is elementary
-abelian of rank $\ell$. But the maximal elementary abelian 2-subgroups of
-$S_n$ have rank $\lfloor n/2\rfloor$, not $n$. Replacing $\ell \approx n$ by
-$n/2$ turns the threshold equation into
+**The lossy step.** Lemma 2.4(i) is applied to a Sylow 2-subgroup of $S_n$, of order $2^{\ell}$ with $\ell = n - s_2(n) \approx n$. The bound $\zeta_2 2^{k(\ell-k)}$ is attained only when the ambient group is elementary abelian of rank $\ell$. But the maximal elementary abelian 2-subgroups of $S_n$ have rank $\lfloor n/2\rfloor$, not $n$. Replacing $\ell \approx n$ by $n/2$ turns the threshold equation into
 
 $$\nu\left(\tfrac12 - \nu\right) = \tfrac{1}{16},$$
 
-whose discriminant is **exactly zero**, with a double root at
-$\nu = \tfrac14$. The same substitution sends µ's threshold
-$\mu < 1/16$ to $\mu(\tfrac12-\mu) < \tfrac1{16}$, again a double root at 1/4.
+whose discriminant is **exactly zero**, with a double root at $\nu = \tfrac14$. The same substitution sends µ's threshold $\mu < 1/16$ to $\mu(\tfrac12-\mu) < \tfrac1{16}$, again a double root at 1/4.
 
-That the barrier is a *double* root rather than an interval endpoint is the
-signature of a tight extremal problem, and $1/4$ is precisely the rank at
-which §3 finds the elementary abelian family concentrated.
+That the barrier is a *double* root rather than an interval endpoint is the signature of a tight extremal problem, and $1/4$ is precisely the rank at which §3 finds the elementary abelian family concentrated.
 
-**Conjecture 7.1.** Theorem 6 holds for all $\mu < 1/4$ and all $\nu < 1/4$,
-and 1/4 is optimal for both.
+**Conjecture 7.1.** Theorem 6 holds for all $\mu < 1/4$ and all $\nu < 1/4$, and 1/4 is optimal for both.
 
 Improvement factors: $4.000$ for µ, $3.732$ for ν.
 
-**Conjecture 7.2 (the statistical theorem Erdős asked for).** For a uniformly
-random $H \le S_n$ with $n \equiv 0 \pmod 4$,
+**Conjecture 7.2 (the statistical theorem Erdős asked for).** For a uniformly random $H \le S_n$ with $n \equiv 0 \pmod 4$,
 $$\log_2|H| = \left(\tfrac14 + o(1)\right)n \quad\text{in probability.}$$
 
-Posed along $n \equiv 0 \pmod 4$ deliberately: [RoTr25] Theorem 4 disproves
-Kantor's conjecture only for $n \equiv 3 \pmod 4$ ("Let n be congruent to 3
-modulo 4 … the probability that a random subgroup of $S_n$ is nilpotent is
-bounded away from 1"), so $n \equiv 0 \pmod 4$ is the residue class where a
-random subgroup may still be nilpotent, hence a 2-group by Theorem 5 ("A
-random nilpotent subgroup of $S_n$ is a 2-group").
+Posed along $n \equiv 0 \pmod 4$ deliberately: [RoTr25] Theorem 4 disproves Kantor's conjecture only for $n \equiv 3 \pmod 4$ ("Let n be congruent to 3 modulo 4 … the probability that a random subgroup of $S_n$ is nilpotent is bounded away from 1"), so $n \equiv 0 \pmod 4$ is the residue class where a random subgroup may still be nilpotent, hence a 2-group by Theorem 5 ("A random nilpotent subgroup of $S_n$ is a 2-group").
 
-The $\ge$ direction of 7.2 is Conjecture 7.1. The $\le$ direction is not
-addressed by anything in [RoTr25].
+The $\ge$ direction of 7.2 is Conjecture 7.1. The $\le$ direction is not addressed by anything in [RoTr25].
 
 **Status after §9 (September 22, 2026).** Conjecture 7.2 is withdrawn, not disproved. Its only support was the elementary abelian family, and §9.5 proves that family is a vanishing fraction of all subgroups. A larger family, counted exactly in §9, concentrates at $\log_2|H| \approx 3n/8$ instead (§9.6), and Conjecture 9.3 replaces 7.2. Of Conjecture 7.1, the claim that 1/4 is optimal for ν is withdrawn: under Conjecture 9.3 a random subgroup is, for even $n$, a 2-group of order about $2^{3n/8}$, so ν could be taken up to 3/8. The double root is no evidence for 1/4 either. The same substitution applied to that family gives a double root at 3/8, and §9.9 shows a double root appears for any family whose count reaches $2^{n^2/16}$, so the paragraph above that calls it "the signature of a tight extremal problem" is true but says nothing about which order is typical. Nothing here bears on µ.
 
@@ -338,33 +246,13 @@ addressed by anything in [RoTr25].
 | median $\|H\|$ | 4 | 6 | 8 | 12 | 16 |
 | $\mathbb{E}[\log_2\|H\|]/n$ | 0.474 | 0.491 | 0.507 | 0.500 | **0.4999** |
 
-The elementary abelian fraction is *falling*, and the mean of $\log_2|H|$ sits
-at $n/2$, not $n/4$. This is not evidence for Conjecture 7.2; if anything it
-runs against it. The honest reading is that $n \le 8$ is nowhere near the
-asymptotic regime — the $n^2/16$ term only overtakes competing structures for
-$n$ far beyond anything enumerable — and that small-$n$ lattice data simply
-cannot discriminate here. It is recorded because omitting it would be
-misleading.
+The elementary abelian fraction is *falling*, and the mean of $\log_2|H|$ sits at $n/2$, not $n/4$. This is not evidence for Conjecture 7.2; if anything it runs against it. The honest reading is that $n \le 8$ is nowhere near the asymptotic regime — the $n^2/16$ term only overtakes competing structures for $n$ far beyond anything enumerable — and that small-$n$ lattice data simply cannot discriminate here. It is recorded because omitting it would be misleading.
 
 The larger family of §9 is closer to these numbers, though not close. At $n = 8$ the Frattini-closed family is 40.9% of all subgroups, against 8.1% for the elementary abelian family, and its mean $\mathbb{E}[\log_2|H|]/n$ is 0.4388, against 0.2947 for the elementary abelian family and 0.4999 for all subgroups. The same caveat applies: $n = 8$ is not asymptotic, and the §9 prediction, $3/8$, is approached from above (§9.6).
 
 **Not proved.** The limits in §3 and §4, and the rate of approach in §6, are established as exact computations at each tested $n$ and as heuristic derivations, not as theorems. The headline of §6, $\log_2 e(n) = n^2/16 + \tfrac34 n\log_2 n + O(n)$, was in the same state until §9.5 proved it. No saddle-point analysis of $a(n,k)$ was carried out; §9.2 carries one out, heuristically, for the simpler count $M(n)$. Theorem 9.1 and Propositions 9.2 and 9.4 are the only asymptotic statements proved here. Conjectures 7.1, 7.2 and 9.3 are conjectures, and 7.2 and the ν-optimality half of 7.1 are withdrawn (§7).
 
-**Novelty not established.** A search of arXiv (metadata, not full text),
-the Semantic Scholar citation list of 2503.05416, and a web search found no
-statement of the $n/4$ constant. That citation list grew from zero to three
-between the first check and the final one, which is a useful reminder that
-this kind of negative result has a short shelf life. The three, re-fetched at
-the end, are: *Proportion of Simple Subgroups in Finite Groups and Their
-Applications* (arXiv:2606.17488), which studies
-$\mathcal{V}(G)=\mathrm{Simp}(G)/|L(G)|$ — a different statistic on the same
-lattice, and not an asymptotic for the order of a random subgroup;
-*Homological Nielsen realization for the manifolds $\#_n\mathbb{CP}^2$*
-(arXiv:2605.27537), unrelated; and *Groups having 12 cyclic subgroups*
-(arXiv:2210.11788), which predates 2503.05416 and is presumably a
-Semantic Scholar linkage artifact. None overlaps §7. Absence of search
-results is weak evidence regardless; the arXiv `all:` field does not index
-full text. Re-run `refs/fetch.sh` before relying on any of this.
+**Novelty not established.** A search of arXiv (metadata, not full text), the Semantic Scholar citation list of 2503.05416, and a web search found no statement of the $n/4$ constant. That citation list grew from zero to three between the first check and the final one, which is a useful reminder that this kind of negative result has a short shelf life. The three, re-fetched at the end, are: *Proportion of Simple Subgroups in Finite Groups and Their Applications* (arXiv:2606.17488), which studies $\mathcal{V}(G)=\mathrm{Simp}(G)/|L(G)|$ — a different statistic on the same lattice, and not an asymptotic for the order of a random subgroup; *Homological Nielsen realization for the manifolds $\#_n\mathbb{CP}^2$* (arXiv:2605.27537), unrelated; and *Groups having 12 cyclic subgroups* (arXiv:2210.11788), which predates 2503.05416 and is presumably a Semantic Scholar linkage artifact. None overlaps §7. Absence of search results is weak evidence regardless; the arXiv `all:` field does not index full text. Re-run `refs/fetch.sh` before relying on any of this.
 
 **Novelty of §9 not established either.** Theorem 9.1 and Propositions 9.2 and 9.4 were checked against [RoTr25] alone. It does not state them, and the strings "7/8", "0.875" and "extraspecial" do not occur in its text. It does isolate the same group. By its Proposition 5.3(i) a transitive 2-group of degree 8 has excess 2 exactly when $d(G) = 4$, which by §9.1 means 8T22, and its upper-bound proof treats that case separately (Theorem 5.7(i), "The group G has excess 2 and degree 8", and Theorem 5.5(ii)(b), "If no Gi, for i ≤ r, has excess 2 and degree 8"). Its lower bound, Proposition 7.3, counts subdirect products of a group "generated by m disjoint p-cycles" instead. So Theorem 9.1 is the lower-bound side of a case [RoTr25] already singled out, and may well be known to its authors. No other literature was searched for §9.
 
@@ -554,8 +442,7 @@ The two §9 programs were tested the same way, by a substitution in the source o
 | `block_families.py` | $L_{\mathrm{sq}}$ returning $\sum \dim V$ instead of $\sum (\dim V)^2$ | 7 gates |
 | `block_families.py` | $f(12)$ lowered to $4\times10^9$ | 1 gate: $\lvert B(12)\rvert + \lvert S_3(12)\rvert \le f(12)$ |
 
-Timings on an idle 11-core arm64 machine, CPython 3.14.7. Ranges are over two
-runs; single figures are one run and should be read as indicative.
+Timings on an idle 11-core arm64 machine, CPython 3.14.7. Ranges are over two runs; single figures are one run and should be read as indicative.
 
 | step | time |
 | --- | --- |
@@ -569,30 +456,12 @@ runs; single figures are one run and should be read as indicative.
 | `block_families.py --n-max 512` | 4.4–6.1 s |
 | `final_check.py` | 65.7–67.0 s over three runs |
 
-$n=9$ was attempted (`subgroups 9`) and deliberately abandoned. After 11
-minutes it had not finished the first class, whose cost is a full
-$9! = 362880$-element coset scan; scaling the $n=8$ run by the $9\times$
-larger permutation group and the $1.87\times$ larger class count puts the
-whole run at four hours at best. It would also have re-verified a value
-already listed in A005432 rather than extending anything, and the enumerator
-is already validated against OEIS at all eight of $n=1,\ldots,8$.
-`final_check.py` carries the expected $n=9$ values (1694723 subgroups, 554
-classes), so the check will run automatically if anyone completes it.
+$n=9$ was attempted (`subgroups 9`) and deliberately abandoned. After 11 minutes it had not finished the first class, whose cost is a full $9! = 362880$-element coset scan; scaling the $n=8$ run by the $9\times$ larger permutation group and the $1.87\times$ larger class count puts the whole run at four hours at best. It would also have re-verified a value already listed in A005432 rather than extending anything, and the enumerator is already validated against OEIS at all eight of $n=1,\ldots,8$. `final_check.py` carries the expected $n=9$ values (1694723 subgroups, 554 classes), so the check will run automatically if anyone completes it.
 
 ## References
 
-* **[RoTr25]** C. M. Roney-Dougal and G. Tracey, *Subgroups of symmetric
-  groups: enumeration and asymptotic properties*, arXiv:2503.05416v1
-  [math.GR], submitted March 7, 2025. <https://arxiv.org/abs/2503.05416>
-  (v1 only as of the last fetch, no journal reference; 3 Semantic Scholar
-  citations, none bearing on §7 — see §8.)
-* **[Py93]** L. Pyber, *Enumerating finite groups of given order*,
-  Ann. of Math. 137 (1993), 203–220. [RoTr25] reference 16.
+* **[RoTr25]** C. M. Roney-Dougal and G. Tracey, *Subgroups of symmetric groups: enumeration and asymptotic properties*, arXiv:2503.05416v1 [math.GR], submitted March 7, 2025. <https://arxiv.org/abs/2503.05416> (v1 only as of the last fetch, no journal reference; 3 Semantic Scholar citations, none bearing on §7 — see §8.)
+* **[Py93]** L. Pyber, *Enumerating finite groups of given order*, Ann. of Math. 137 (1993), 203–220. [RoTr25] reference 16.
 * **[GN]** T. Dokchitser, *GroupNames*, "Transitive groups of degree up to 15", <https://people.maths.bris.ac.uk/~matyd/GroupNames/T15.html>, read September 22, 2026. Used for the orders of 8T1–8T35 and for the entry "Extraspecial group; = D4○D4", ES+(2,2), 32,49, at 8T22 (§9.1).
-* **[Va99]** Various, *Some of Paul's favorite problems*, booklet for the
-  conference "Paul Erdős and his mathematics", Budapest, July 1999 — the
-  source of #1162 (5.73). Not consulted directly; not available to me.
-* OEIS [A005432](https://oeis.org/A005432) (subgroups of $S_n$),
-  [A000638](https://oeis.org/A000638) (conjugacy classes of subgroups),
-  [A000085](https://oeis.org/A000085) (involutions),
-  [A006116](https://oeis.org/A006116) (Galois numbers).
+* **[Va99]** Various, *Some of Paul's favorite problems*, booklet for the conference "Paul Erdős and his mathematics", Budapest, July 1999 — the source of #1162 (5.73). Not consulted directly; not available to me.
+* OEIS [A005432](https://oeis.org/A005432) (subgroups of $S_n$), [A000638](https://oeis.org/A000638) (conjugacy classes of subgroups), [A000085](https://oeis.org/A000085) (involutions), [A006116](https://oeis.org/A006116) (Galois numbers).

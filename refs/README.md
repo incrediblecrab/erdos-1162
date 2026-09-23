@@ -15,16 +15,13 @@ Primary sources for every external claim in `NOTES.md`. **Nothing here is commit
 
 ## Read the base-2 remark from a render, not the text layer
 
-`pdftotext` in its default and `-layout` modes sorts text by position and
-splices the superscripts of the surrounding displayed math into the sentence,
-producing
+`pdftotext` in its default and `-layout` modes sorts text by position and splices the superscripts of the surrounding displayed math into the sentence, producing
 
 ```
 ... (our logarithms are to the 2 2 base 2). Pyber conjectured ...
 ```
 
-so a verbatim search against them **fails** even though the sentence is on the
-page. Two ways to read it correctly:
+so a verbatim search against them **fails** even though the sentence is on the page. Two ways to read it correctly:
 
 ```sh
 pdftotext -raw roney-dougal_tracey_2503.05416.pdf -   # content-stream order
@@ -32,13 +29,8 @@ pdftoppm -png -r 150 -f 1 -l 1 -x 180 -y 1275 -W 1300 -H 105 \
          roney-dougal_tracey_2503.05416.pdf quote     # render and read it
 ```
 
-Both were done. `src/final_check.py` uses `-raw`; the rendered crop was read
-by eye and reads
+Both were done. `src/final_check.py` uses `-raw`; the rendered crop was read by eye and reads
 
-> … where ξ = ⅙ log 24 (our logarithms are to the base 2). Pyber
-> conjectured, however, that |Sub(S_n)| = 2^{n²/16+o(n²)}.
+> … where ξ = ⅙ log 24 (our logarithms are to the base 2). Pyber conjectured, however, that |Sub(S_n)| = 2^{n²/16+o(n²)}.
 
-Note also that `-raw` loses the minus signs in the exponents of Lemma 2.4's
-$\zeta_p = \prod_{i\ge1}(1-p^{-i})^{-1}$, rendering it as `(1 − pi)−1`. That
-formula is therefore *described* in `NOTES.md`, not quoted; the numerical
-claim $\zeta_2 = 3.46275\ldots < 4$ is checked independently.
+Note also that `-raw` loses the minus signs in the exponents of Lemma 2.4's $\zeta_p = \prod_{i\ge1}(1-p^{-i})^{-1}$, rendering it as `(1 − pi)−1`. That formula is therefore *described* in `NOTES.md`, not quoted; the numerical claim $\zeta_2 = 3.46275\ldots < 4$ is checked independently.

@@ -1,59 +1,33 @@
 # Erdős #1162 — the number of subgroups of $S_n$, and their order
 
-**Question.** Give an asymptotic formula for the number of subgroups of $S_n$.
-Is there a statistical theorem on their order? (Erdős–Turán, [Va99, 5.73].)
-**Status: open.** Not solved here.
+**Question.** Give an asymptotic formula for the number of subgroups of $S_n$. Is there a statistical theorem on their order? (Erdős–Turán, [Va99, 5.73].) **Status: open.** Not solved here.
 
 ## ELI5
 
-Take $n$ numbered cards. A *shuffle* is any way of rearranging them, and $S_n$
-is the collection of all of them — for 8 cards that is $8! = 40\,320$ shuffles.
+Take $n$ numbered cards. A *shuffle* is any way of rearranging them, and $S_n$ is the collection of all of them — for 8 cards that is $8! = 40\,320$ shuffles.
 
-Some sub-collections of shuffles are self-contained: do any two of them in a
-row and you land on something still in the collection, and anything you do can
-be undone without leaving it. Those are the **subgroups**. "Leave everything
-alone" on its own is one. All 40 320 together is another. The interesting ones
-sit in between — for instance, every shuffle that disturbs only the first three
-cards and leaves the other five alone.
+Some sub-collections of shuffles are self-contained: do any two of them in a row and you land on something still in the collection, and anything you do can be undone without leaving it. Those are the **subgroups**. "Leave everything alone" on its own is one. All 40 320 together is another. The interesting ones sit in between — for instance, every shuffle that disturbs only the first three cards and leaves the other five alone.
 
 Erdős and Turán asked two questions about them.
 
-**1. How many subgroups are there?** For 8 cards, exactly 151 221. For 18
-cards it is about $7.6\times10^{18}$, so actually listing them is hopeless
-well before you get there and the goal is a formula for roughly how big the
-number is. This half is now largely answered by other people: it is about
-$2^{n^2/16}$. For 100 cards that is a number with 189 digits.
+**1. How many subgroups are there?** For 8 cards, exactly 151 221. For 18 cards it is about $7.6\times10^{18}$, so actually listing them is hopeless well before you get there and the goal is a formula for roughly how big the number is. This half is now largely answered by other people: it is about $2^{n^2/16}$. For 100 cards that is a number with 189 digits.
 
-**2. How big is a typical subgroup?** Pick one of those 151 221 at random. How
-many shuffles does it contain? Erdős wanted a "statistical theorem" — a rule
-for what to expect. This half is barely touched. One published theorem
-addresses it, from 2025.
+**2. How big is a typical subgroup?** Pick one of those 151 221 at random. How many shuffles does it contain? Erdős wanted a "statistical theorem" — a rule for what to expect. This half is barely touched. One published theorem addresses it, from 2025.
 
 **What is in this repository.** Mostly work on question 2, in two rounds. The first counted one well-behaved family of subgroups exactly, out to 512 cards: its members are overwhelmingly concentrated at about $2^{n/4}$ shuffles, with a spread that stays bounded as $n$ grows. The second round proved that this family is a vanishing fraction of all subgroups, so it cannot be the answer. It then counted a larger family exactly, also out to 512 cards, whose typical member has about $2^{3n/8}$ shuffles; that limit is argued, not proved. Along the way it proved that there are at least about $2^{n^2/16}\,n^{7n/8}$ subgroups, up to a factor $2^{O(n)}$, which for large $n$ is more than the 2025 paper's lower bound. Whether that proof is new was checked against the 2025 paper only.
 
 **The catch, and it is a real one.** The larger family is not known to be typical either. Nobody has proved that the subgroups outside it are rare, and at the sizes that can be checked directly, 6 to 18 cards, between 41.5 % and 59.4 % of all subgroups lie outside it and its companion family for odd $n$. For $4\le n\le8$ the average subgroup is nearer $2^{n/2}$ than $2^{3n/8}$. So $2^{3n/8}$ is a conjecture with some evidence behind it, not an answer, and the small-$n$ data are still drifting.
 
-**Objective.** Fix the ambiguity in the displayed statement, compute exactly
-— to $n=512$, far past any tabulated range — the rank-stratified family of
-subgroups that carries the whole first-order answer, identify the limiting
-constants in closed form, and turn the vague second half of the question into
-a precise conjecture with the gap to the published theorem located exactly.
-The full-lattice runs ($n\le8$) are a *validation* of the enumerator against
-OEIS, not an extension: A005432 is already tabulated to $n=18$.
+**Objective.** Fix the ambiguity in the displayed statement, compute exactly — to $n=512$, far past any tabulated range — the rank-stratified family of subgroups that carries the whole first-order answer, identify the limiting constants in closed form, and turn the vague second half of the question into a precise conjecture with the gap to the published theorem located exactly. The full-lattice runs ($n\le8$) are a *validation* of the enumerator against OEIS, not an extension: A005432 is already tabulated to $n=18$.
 
 **Inputs.** The problem statement from [erdosproblems.com/1162](https://www.erdosproblems.com/1162); Roney-Dougal–Tracey, arXiv:2503.05416; OEIS A005432, A000638, A000085, A006116; the GroupNames table of transitive groups of degree up to 15, for the degree-8 groups of §9.1. Run `refs/fetch.sh` — nothing is redistributed here.
 
 **Findings.**
 
-* The logarithm in the displayed statement is **base 2** (§1) — the constant
-  1/16 is meaningless otherwise, and the problem page never says so.
-* The full subgroup lattice of $S_n$ recomputed for $n \le 8$ (151 221
-  subgroups, 296 classes at $n=8$), matching A005432 and A000638 exactly.
+* The logarithm in the displayed statement is **base 2** (§1) — the constant 1/16 is meaningless otherwise, and the problem page never says so.
+* The full subgroup lattice of $S_n$ recomputed for $n \le 8$ (151 221 subgroups, 296 classes at $n=8$), matching A005432 and A000638 exactly.
 * Elementary abelian 2-subgroups counted exactly to $n = 512$ — this family already carries the entire leading term $2^{n^2/16}$. Their rank concentrates at $n/4$ with a spread that does not grow: numerically the law tends to $\mathbb{P}(n/4+j) \propto 2^{-j^2}$, and the standard deviation of the exact rank distribution agrees with the closed form $0.849305961022908\ldots$ to **35 decimal places** at $n=512$. That is exact computation at each $n$, not a proof of the limit.
-* A single maximal elementary abelian gives only $n^2/16 + 2.8820499654\ldots$
-  — a *bounded* excess, with the constant $\log_2(\vartheta/\eta)$ in closed
-  form. So the $n\log n$ gain in [RoTr25] Theorem 1 comes entirely from
-  multiplicity.
+* A single maximal elementary abelian gives only $n^2/16 + 2.8820499654\ldots$ — a *bounded* excess, with the constant $\log_2(\vartheta/\eta)$ in closed form. So the $n\log n$ gain in [RoTr25] Theorem 1 comes entirely from multiplicity.
 * The second-order term of $\log_2 e(n)$, the elementary abelian count, is $\tfrac34 n\log_2 n$. It was derived from orbit structure (orbits of size 4 beat size 2 in a tie at the leading constant), confirmed by **out-of-sample** extrapolation ($A_\infty = 0.75057$), and is now proved up to $O(n)$ (Proposition 9.2).
 * [RoTr25] Theorem 6 — the only published result on the *order* — has one lossy step, located exactly in §7: Lemma 2.4 is applied with $\ell \approx n$, where the maximal elementary abelian subgroups have rank $n/2$. With $n/2$ the threshold equation has **discriminant exactly zero** and a double root at $1/4$, and Conjecture 7.1 is that Theorem 6 holds for both of its constants up to $1/4$. The first version of this bullet said Theorem 6 *"is not optimal"*; §7 does not show that. The double root turned out to be automatic, under the assumptions of §9.9, for any family that reaches $2^{n^2/16}$, and the claim that $1/4$ is optimal for ν is withdrawn.
 * **Theorem 9.1:** $\log_2 f(n) \ge n^2/16 + \tfrac78 n\log_2 n - O(n)$ (§9.4), by counting the Frattini-closed subgroups that induce a conjugate of the extraspecial group 8T22 $= 2^{1+4}_+$ on each of $n/8$ blocks of 8 points. It improves the large-$n$ constant: $\liminf_n (\log_2 f(n) - n^2/16)/(n\log_2 n) \ge 7/8$, where the explicit constant of the [RoTr25] proof is at most $5/906$. Theorem 1 of [RoTr25] is stated for all $n > 1$, where $n = 2$ caps the constant at $3/8$, so Theorem 9.1 does not let one put $7/8$ into it. Novelty was checked against [RoTr25] only, which singles out the same group in its upper-bound proof.
@@ -84,19 +58,8 @@ Read [`NOTES.md`](NOTES.md). Reproduce with `bash scripts/reproduce.sh`.
 
 ## Attribution
 
-The question as displayed at the top is quoted from
-[erdosproblems.com/1162](https://www.erdosproblems.com/1162), maintained by
-Thomas Bloom, whose companion repository
-[teorth/erdosproblems](https://github.com/teorth/erdosproblems) is licensed
-Apache 2.0. The original attribution there is to Erdős and Turán via
-[Va99] — *Some of Paul's favorite problems*, the booklet produced for the
-conference "Paul Erdős and his mathematics", Budapest, July 1999 — problem
-5.73.
+The question as displayed at the top is quoted from [erdosproblems.com/1162](https://www.erdosproblems.com/1162), maintained by Thomas Bloom, whose companion repository [teorth/erdosproblems](https://github.com/teorth/erdosproblems) is licensed Apache 2.0. The original attribution there is to Erdős and Turán via [Va99] — *Some of Paul's favorite problems*, the booklet produced for the conference "Paul Erdős and his mathematics", Budapest, July 1999 — problem 5.73.
 
-No third-party paper, OEIS page, or API response is redistributed here.
-`refs/fetch.sh` retrieves them; `refs/README.md` records which claim each one
-supports.
+No third-party paper, OEIS page, or API response is redistributed here. `refs/fetch.sh` retrieves them; `refs/README.md` records which claim each one supports.
 
-The code, data, and prose in this repository are MIT licensed — see
-[`LICENSE`](LICENSE). That covers this work only: the quoted question and any
-material `refs/fetch.sh` downloads remain under their own terms.
+The code, data, and prose in this repository are MIT licensed — see [`LICENSE`](LICENSE). That covers this work only: the quoted question and any material `refs/fetch.sh` downloads remain under their own terms.
