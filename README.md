@@ -29,21 +29,9 @@ many shuffles does it contain? Erdős wanted a "statistical theorem" — a rule
 for what to expect. This half is barely touched. One published theorem
 addresses it, from 2025.
 
-**What is in this repository.** Mostly work on question 2. Counting all
-subgroups is out of reach, so we counted one well-behaved family of them
-exactly, out to 512 cards, and found that family is rigid: its members are
-overwhelmingly concentrated at a single size, and the spread around that size
-stays bounded as $n$ grows rather than widening. That suggests an answer to
-question 2 — a typical subgroup should contain about $2^{n/4}$ shuffles — and
-it locates a specific step in the 2025 proof where a factor of 4 is given away.
+**What is in this repository.** Mostly work on question 2, in two rounds. The first counted one well-behaved family of subgroups exactly, out to 512 cards: its members are overwhelmingly concentrated at about $2^{n/4}$ shuffles, with a spread that stays bounded as $n$ grows. The second round proved that this family is a vanishing fraction of all subgroups, so it cannot be the answer. It then counted a larger family exactly, also out to 512 cards, whose typical member has about $2^{3n/8}$ shuffles; that limit is argued, not proved. Along the way it proved that there are at least about $2^{n^2/16}\,n^{7n/8}$ subgroups, up to a factor $2^{O(n)}$, which for large $n$ is more than the 2025 paper's lower bound. Whether that proof is new was checked against the 2025 paper only.
 
-**The catch, and it is a real one.** Everything above concerns one family of
-subgroups, and that family might be a vanishing sliver of all of them. At
-$n\le8$, where we can check directly, its share is *shrinking* — from 47 % down
-to 8 % — and the average subgroup there is nearer $2^{n/2}$ than $2^{n/4}$.
-Nothing we have rules out that the pattern we measured describes a corner of
-the problem rather than the whole of it. So this is a conjecture with evidence
-behind it, not an answer.
+**The catch, and it is a real one.** The larger family is not known to be typical either. Nobody has proved that the subgroups outside it are rare, and at the sizes that can be checked directly, 6 to 18 cards, between 41.5 % and 59.4 % of all subgroups lie outside it and its companion family for odd $n$. For $4\le n\le8$ the average subgroup is nearer $2^{n/2}$ than $2^{3n/8}$. So $2^{3n/8}$ is a conjecture with some evidence behind it, not an answer, and the small-$n$ data are still drifting.
 
 **Objective.** Fix the ambiguity in the displayed statement, compute exactly
 — to $n=512$, far past any tabulated range — the rank-stratified family of
@@ -53,10 +41,7 @@ a precise conjecture with the gap to the published theorem located exactly.
 The full-lattice runs ($n\le8$) are a *validation* of the enumerator against
 OEIS, not an extension: A005432 is already tabulated to $n=18$.
 
-**Inputs.** The problem statement from
-[erdosproblems.com/1162](https://www.erdosproblems.com/1162); Roney-Dougal–Tracey,
-arXiv:2503.05416; OEIS A005432, A000638, A000085, A006116. Run `refs/fetch.sh`
-— nothing is redistributed here.
+**Inputs.** The problem statement from [erdosproblems.com/1162](https://www.erdosproblems.com/1162); Roney-Dougal–Tracey, arXiv:2503.05416; OEIS A005432, A000638, A000085, A006116; the GroupNames table of transitive groups of degree up to 15, for the degree-8 groups of §9.1. Run `refs/fetch.sh` — nothing is redistributed here.
 
 **Findings.**
 
@@ -64,30 +49,19 @@ arXiv:2503.05416; OEIS A005432, A000638, A000085, A006116. Run `refs/fetch.sh`
   1/16 is meaningless otherwise, and the problem page never says so.
 * The full subgroup lattice of $S_n$ recomputed for $n \le 8$ (151 221
   subgroups, 296 classes at $n=8$), matching A005432 and A000638 exactly.
-* Elementary abelian 2-subgroups counted exactly to $n = 512$ — this family
-  already carries the entire leading term $2^{n^2/16}$. Its rank is
-  $n/4 + O(1)$ with an **absolutely bounded** spread: the limiting law is
-  $\mathbb{P}(n/4+j) \propto 2^{-j^2}$, and the standard deviation of the
-  exact rank distribution agrees with the closed form
-  $0.849305961022908\ldots$ to **35 decimal places** at $n=512$.
+* Elementary abelian 2-subgroups counted exactly to $n = 512$ — this family already carries the entire leading term $2^{n^2/16}$. Their rank concentrates at $n/4$ with a spread that does not grow: numerically the law tends to $\mathbb{P}(n/4+j) \propto 2^{-j^2}$, and the standard deviation of the exact rank distribution agrees with the closed form $0.849305961022908\ldots$ to **35 decimal places** at $n=512$. That is exact computation at each $n$, not a proof of the limit.
 * A single maximal elementary abelian gives only $n^2/16 + 2.8820499654\ldots$
   — a *bounded* excess, with the constant $\log_2(\vartheta/\eta)$ in closed
   form. So the $n\log n$ gain in [RoTr25] Theorem 1 comes entirely from
   multiplicity.
-* The second-order term is $\tfrac34 n\log_2 n$, derived from orbit structure
-  (orbits of size 4 beat size 2 in a tie at the leading constant) and
-  confirmed by **out-of-sample** extrapolation: $A_\infty = 0.75057$.
-* [RoTr25] Theorem 6 — the only published result on the *order* — is not
-  optimal. Its constants $1/16$ and $\tfrac12-\tfrac{\sqrt3}{4}$ both come
-  from applying Lemma 2.4 with $\ell \approx n$; the elementary abelian
-  picture replaces that with $n/2$, giving a threshold equation with
-  **discriminant exactly zero** and a double root at $\mathbf{1/4}$.
-  Improvement factors 4.000 and 3.732.
+* The second-order term of $\log_2 e(n)$, the elementary abelian count, is $\tfrac34 n\log_2 n$. It was derived from orbit structure (orbits of size 4 beat size 2 in a tie at the leading constant), confirmed by **out-of-sample** extrapolation ($A_\infty = 0.75057$), and is now proved up to $O(n)$ (Proposition 9.2).
+* [RoTr25] Theorem 6 — the only published result on the *order* — has one lossy step, located exactly in §7: Lemma 2.4 is applied with $\ell \approx n$, where the maximal elementary abelian subgroups have rank $n/2$. With $n/2$ the threshold equation has **discriminant exactly zero** and a double root at $1/4$, and Conjecture 7.1 is that Theorem 6 holds for both of its constants up to $1/4$. The first version of this bullet said Theorem 6 *"is not optimal"*; §7 does not show that. The double root turned out to be automatic, under the assumptions of §9.9, for any family that reaches $2^{n^2/16}$, and the claim that $1/4$ is optimal for ν is withdrawn.
+* **Theorem 9.1:** $\log_2 f(n) \ge n^2/16 + \tfrac78 n\log_2 n - O(n)$ (§9.4), by counting the Frattini-closed subgroups that induce a conjugate of the extraspecial group 8T22 $= 2^{1+4}_+$ on each of $n/8$ blocks of 8 points. It improves the large-$n$ constant: $\liminf_n (\log_2 f(n) - n^2/16)/(n\log_2 n) \ge 7/8$, where the explicit constant of the [RoTr25] proof is at most $5/906$. Theorem 1 of [RoTr25] is stated for all $n > 1$, where $n = 2$ caps the constant at $3/8$, so Theorem 9.1 does not let one put $7/8$ into it. Novelty was checked against [RoTr25] only, which singles out the same group in its upper-bound proof.
+* **Proposition 9.2:** $e(n)/f(n) \le 2^{-\frac18 n\log_2 n + O(n)} \to 0$ (§9.5). The elementary abelian family of the bullets above is a vanishing fraction of all subgroups, so Conjecture 7.2, which put a typical subgroup at $2^{n/4}$, is withdrawn, not disproved.
+* **A larger family,** the Frattini-closed 2-subgroups with every orbit of size at most 8, counted exactly for every $n \le 512$ (§9.1, §9.6). Inside it the mean of $\log_2|H|/n$ is 0.3835 at $n = 512$ and falling toward $3/8$, and the sd grows like $n^{1/4}$. The limits come from a saddle-point heuristic, not a proof.
+* **Conjecture 9.3** replaces 7.2: $\log_2 f(n) = n^2/16 + \tfrac78 n\log_2 n + O(n)$, and a random subgroup has $\log_2|H| = (\tfrac38 + o(1))n$ in probability (§9.8). It rests on three unproved premises, which together say that the subgroups outside this family and its odd-$n$ companion $S_3(n)$ are negligible.
 
-**Stated plainly:** the evidence for the last point is about elementary
-abelian subgroups only, and they could be a vanishing fraction of all
-subgroups. At $n\le8$ that fraction is *falling* (0.47 → 0.08) and
-$\mathbb{E}[\log_2|H|]/n \approx 0.50$, not 0.25. See NOTES.md §8.
+**Stated plainly:** the first family is proved atypical, and the second is not known to be typical. For $6 \le n \le 18$ roughly half of all subgroups lie outside it and its companion, the ratios of $f(n)$ to the formula the premises would give are still drifting, and for $4 \le n \le 8$ the mean of $\log_2|H|/n$ over all subgroups is between 0.47 and 0.51, above both $1/4$ and $3/8$. The asymptotic statements proved here are Theorem 9.1 and Propositions 9.2 and 9.4. The limit laws of both families, and the approximation $e(n) \approx G_{n/2}M(n)$ behind the first, rest on exact computation at each $n$ and on heuristic arguments, not on proofs. See NOTES.md §8 and §9.8.
 
 Read [`NOTES.md`](NOTES.md). Reproduce with `bash scripts/reproduce.sh`.
 
@@ -99,13 +73,14 @@ Read [`NOTES.md`](NOTES.md). Reproduce with `bash scripts/reproduce.sh`.
 | `src/asymptotics.py` | rank distribution, Galois numbers, the excess fit |
 | `src/sd_precision.py` | the rank sd against its closed form, exact at 60 dp |
 | `src/orbit_model.py` | orbit-structure model for the $n\log n$ term; held-out extrapolation |
-| `src/final_check.py` | re-derives every claim; exit 0 = pass |
-| `data/`, `results/` | exact lattices, rank counts, measured artifacts |
+| `src/census8.py` | every 2-subgroup of $S_n$, $n\le8$, by brute force on permutations; the transitive types of §9.1 |
+| `src/block_families.py` | the Frattini-closed family of §9, exact to $n = 512$ |
+| `src/final_check.py` | checks the artifacts and compares every decimal number in `NOTES.md` with a fresh computation, apart from the timings and the marked first-version values; exit 0 = pass |
+| `scripts/reproduce.sh` | regenerates every artifact, then runs `final_check.py` |
+| `data/`, `results/` | exact lattices, rank counts, measured artifacts and logs; each folder's README lists its files |
+| `refs/` | `fetch.sh`, which downloads the primary sources, and a README saying which claim each supports |
 
-**Conventions.** All logarithms base 2. Needs a Python 3 with numpy and mpmath
-(developed on 3.14.7); `scripts/reproduce.sh` takes `$PY` if set and otherwise
-falls back to `python3` on `$PATH`. The C enumerator needs a C99 compiler; it
-uses NEON intrinsics on arm64 and falls back to portable code elsewhere.
+**Conventions.** All logarithms base 2. Needs a Python 3 with numpy and mpmath (developed on 3.14.7), and poppler's `pdftotext` for the quotation checks; the header of `scripts/reproduce.sh` says which interpreter it picks and how `$PY` overrides it. The C enumerator needs a C99 compiler; it uses NEON intrinsics on arm64 and falls back to portable code elsewhere.
 
 ## Attribution
 

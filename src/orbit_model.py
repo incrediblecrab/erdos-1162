@@ -39,17 +39,21 @@ coefficient is 1/2 + c_2/4, maximised at c_2 = 1.
                  i.e. the fitted A converges to 0.75.
 
   PREDICTION B:  the approach is slow.  Moving a fraction eps of the points
-                 off 4-orbits costs only (eps/4) n log_2 n but buys entropy,
-                 so A_local(n) approaches 3/4 from below and the limit has to
-                 be extrapolated rather than read off.
+                 from 4-orbits into 2-orbits costs only (eps/4) n log_2 n but
+                 buys entropy, so A_local(n) approaches 3/4 from below and the
+                 limit has to be extrapolated rather than read off.
 
                  [The first version of this file guessed eps ~ c/log_2 n.
                  That is FALSE: measured eps*log_2 n falls 1.589 -> 0.924 over
                  n = 64..512 while eps*sqrt(n) only drifts 2.119 -> 2.323, and
                  a held-out scan over A_inf + c n^-p selects p = 0.48.  The
                  guessed exponent is kept here as a rejected hypothesis; the
-                 exponent is now selected by held-out error, not asserted, and
-                 I have no derivation of the value 1/2.]
+                 exponent is selected by held-out error, not asserted.  The
+                 first version also said "off 4-orbits"; eps is the 2-orbit
+                 fraction.  NOTES.md section 9.2 derives the value 1/2
+                 heuristically from the saddle point of the count M(n) of set
+                 partitions into blocks of size 2 and 4: eps ~ sqrt(6/n), and
+                 A_local = 3/4 - (sqrt6/8) n^-1/2 + O(n^-3/2).]
 
   PREDICTION C:  at the dominant rank k = n/4 the exact expected fraction of
                  points lying in orbits of size 4 tends to 1, slowly, and the

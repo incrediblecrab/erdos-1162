@@ -9,39 +9,17 @@
 #   4. brute-force cross-check      verify_elemab.py, which shares no code with elemab.py
 #   5. exact elementary abelians    n up to 512: rank law, Galois constant
 #   6. the orbit model              second-order term, incl. the held-out extrapolation
-#   7. final_check.py               re-derives every claim from the artifacts; exit 0 = pass
+#   6b. sd precision                the rank sd against its closed form, exact at 60 dp
+#   6c. the section 9 programs      census8.py (2-subgroups of S_n, n <= 8) and block_families.py
+#   7. final_check.py               checks the artifacts and the numbers in NOTES.md; exit 0 = pass
 #
-# Needs: cc (C99), curl, a python3 with numpy and mpmath, and poppler's
-# pdftotext for the quotation checks in stage 7.  $PY overrides the
-# interpreter; otherwise ~/.venvs/main/bin/python is used when present and
-# python3 from $PATH otherwise.  Without the PDF those checks report "skip",
-# not "pass" -- final_check.py distinguishes them.
+# Needs: cc (C99), curl, a python3 with numpy and mpmath, and poppler's pdftotext for the quotation checks in stage 7.  $PY overrides the interpreter; otherwise ~/.venvs/main/bin/python is used when present and python3 from $PATH otherwise.  Without the downloads those checks report "skip", not "pass" -- final_check.py distinguishes them.
 #
-# Runtime on an otherwise-idle M-series laptop.  FAST figures are the range
-# over two runs; the full-only figures are from one run each, so treat them as
-# indicative rather than a mean.
+# FAST=1 stops the lattice at n=7, the brute force at n=9 and everything else at n=128.  final_check.py then reports every comparison that needs a larger n as skipped, and the summary line counts the skips; a skip is not a pass.
 #
-#   stage            FAST=1                    full
-#   3 lattice        8.8-11.6 s  (n<=7)        ~15 min  (n=8 alone: 883 s)
-#   4 brute force    43.9-50.8 s (n<=9)        913 s    (n=10)
-#   5 elementary ab. 0.8-0.9 s   (n<=128)      ~4 min   (n=512, needs ~2 GB)
-#   6 orbit model    0.2-0.3 s                 ~90 s
-#   6b sd precision  ~2 s        (n<=128)      115 s    (n=512, 60 dp)
-#   7 final check    1.1-1.2 s                 ~3 s
+# Timings, the check count and the planted defects that validated final_check.py are in NOTES.md section 10 and are kept only there.
 #
-# FAST=1 totalled ~60 s end to end excluding the downloads; full is ~35 min.
-# The n=10 brute force, not the lattice, is what FAST is avoiding.
-#
-# FAST=1 reproduces every claim in NOTES.md except the n=8 lattice row, the
-# n=10 brute-force row, the 512-column of the rank table and the 256/512 rows
-# of the high-precision sd table; final_check.py then reports the held-out
-# extrapolation as "skip" (not enough points) and prints fewer checks.  Both
-# were run: full gives 118 checks and 0 failed.  A skip is not a pass and the
-# summary line says so.
-#
-# Everything is redirected to results/*.log.  Do not pipe these to `tail`:
-# stdout is block-buffered through a pipe and you will see nothing until the
-# end of a 15-minute run.
+# Everything is redirected to results/*.log.  Do not pipe these to `tail`: stdout is block-buffered through a pipe and you will see nothing until the end of the run.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -115,9 +93,7 @@ fi
 tail -8 results/orbit_model.log
 
 echo "=== 6b. rank sd against its closed form, exact at 60 dp =============="
-# The doubles in elemab_stats.json truncate at ~1e-16 relative, which is
-# coarser than the actual convergence from n=256 on.  This recomputes the
-# variance from the exact integer counts in mpmath.
+# The sd in elemab_stats.json is a double computed through floating-point logarithms, far noisier than the actual convergence from n=256 on (NOTES.md section 3).  This recomputes the variance from the exact integer counts in mpmath.
 if [ "$FAST" = "1" ]; then
   "$PY" src/sd_precision.py --n 64 128 --out data/sd_precision.json \
     > results/sd_precision.log 2>&1
@@ -127,8 +103,13 @@ else
 fi
 grep -E "^  n=" results/sd_precision.log
 
+echo "=== 6c. the section 9 programs ======================================"
+# census8.py enumerates the 2-subgroups of S_n for n <= 8 by brute force on permutations; block_families.py reads its output and the stage 5 and 6 artifacts.
+"$PY" src/census8.py > results/census8.log 2>&1
+tail -2 results/census8.log
+"$PY" src/block_families.py --n-max "$N_MAX" > results/block_families.log 2>&1
+tail -2 results/block_families.log
+
 echo "=== 7. final check ==================================================="
-# The gate.  Exit 0 means every number in NOTES.md was re-derived from the
-# artifacts above.  It was itself validated by planting three defects (see
-# NOTES.md section 9); a clean pass of an unchallenged checker proves nothing.
+# The gate.  Exit 0 means the artifacts above pass their checks and every decimal number in NOTES.md agrees with a fresh computation, apart from the timings and the first-version values that NOTES.md marks.  It was validated by planting defects (NOTES.md section 10); a clean pass of an unchallenged checker proves nothing.
 "$PY" src/final_check.py 2>&1 | tee results/final_check.log

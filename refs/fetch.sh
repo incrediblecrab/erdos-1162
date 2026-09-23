@@ -4,7 +4,8 @@
 # None of these files are redistributed in this repository: the Roney-Dougal
 # and Tracey preprint is copyright its authors, and the OEIS pages have their
 # own terms.  Run this to populate refs/ locally.  src/final_check.py reads
-# the PDF to verify quotations, and skips those checks if it is absent.
+# the PDF to verify quotations and the GroupNames page for section 9.1, and
+# skips those checks if a file is absent.
 #
 # Everything downloaded here is ignored by .gitignore.
 set -e
@@ -35,6 +36,13 @@ curl -sL "https://api.semanticscholar.org/graph/v1/paper/arXiv:2503.05416/citati
 for id in A005432 A000638 A000085 A006116; do
   curl -sL "https://oeis.org/search?q=id:$id&fmt=text" -o "oeis_$id.txt"
 done
+
+# [GN] GroupNames, transitive groups of degree up to 15.  NOTES.md section
+# 9.1 takes the orders of 8T1-8T35 and the entry for 8T22 from it, and
+# src/final_check.py parses the saved page to check them.  (LMFDB blocks
+# scripted downloads, so it is not used.)
+curl -sL "https://people.maths.bris.ac.uk/~matyd/GroupNames/T15.html" \
+     -o groupnames_T15.html
 
 echo "refs/ populated:"
 ls -la

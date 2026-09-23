@@ -1,9 +1,6 @@
 # refs/
 
-Primary sources for every external claim in `NOTES.md`. **Nothing here is
-committed** — the Roney-Dougal–Tracey preprint is copyright its authors and
-the OEIS pages carry their own terms. Run `sh fetch.sh` to populate this
-directory locally; `.gitignore` excludes the downloads.
+Primary sources for every external claim in `NOTES.md`. **Nothing here is committed** — the Roney-Dougal–Tracey preprint is copyright its authors, and the OEIS and GroupNames pages carry their own terms. Run `sh fetch.sh` to populate this directory locally; `.gitignore` excludes the downloads.
 
 | File | Supports |
 |---|---|
@@ -12,8 +9,9 @@ directory locally; `.gitignore` excludes the downloads.
 | `oeis_A000638.txt` | conjugacy classes of subgroups of $S_n$, $n\le20$ |
 | `oeis_A000085.txt` | involutions in $S_n$; $a(n,1) = A000085(n)-1$ |
 | `oeis_A006116.txt` | Galois numbers $G_r = \sum_k \binom{r}{k}_2$ |
-| `arxiv_2503.05416.xml` | arXiv API record: v1 only, submitted 7 March 2025, no journal reference |
+| `arxiv_2503.05416.xml` | arXiv API record: v1 only, submitted March 7, 2025, no journal reference |
 | `semanticscholar_citations.json` | citations of 2503.05416 — three at the last fetch, none bearing on the order of a random subgroup (see `NOTES.md` §8); this count grows, so re-fetch before relying on it |
+| `groupnames_T15.html` | [GN]: the orders of the transitive groups 8T1–8T35 and the entry for 8T22 ("Extraspecial group; = D4○D4"), used in `NOTES.md` §9.1 and parsed by `src/final_check.py` |
 
 ## Read the base-2 remark from a render, not the text layer
 

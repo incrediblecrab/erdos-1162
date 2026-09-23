@@ -1,11 +1,6 @@
 """High-precision check of the rank standard deviation against its closed form.
 
-`asymptotics.py` stores the standard deviation of the elementary abelian rank
-distribution as a double in `data/elemab_stats.json`.  That is lossy at about
-1e-16 relative, which is *coarser than the actual convergence* from n=256 on:
-read off the doubles, the deviation from the closed form looks like 2.8e-10 at
-n=256 and 1.2e-09 at n=512, and non-monotone.  Both figures are rounding noise
-in the artifact, not convergence error.
+`asymptotics.py` stores the standard deviation of the elementary abelian rank distribution as a double in `data/elemab_stats.json`, computed through floating-point logarithms and a variance that cancels about four digits, so it is far noisier than the actual convergence from n=256 on (NOTES.md section 3): read off the doubles, the deviation from the closed form looks like 2.8e-10 at n=256 and 1.2e-09 at n=512, and non-monotone.  Both figures are rounding noise in the artifact, not convergence error.
 
 This module recomputes the variance from the exact integer rank counts in
 mpmath at 60 decimal places and compares it with
