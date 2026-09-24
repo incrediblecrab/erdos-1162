@@ -1129,7 +1129,7 @@ def notes_s3() -> None:
     compare("§3 1/4 - 2/n", "$1/4 - 2/n$, which is ", [Fraction(1, 4) - Fraction(2, n) for n in (64, 128, 256)])
     compare("§3 measured c", "the measured values are ", [c_[64], c_[128], c_[256]])
     dev = [opt(lambda r: abs(Decimal(r["sd"]) - D_THETA_SD), ST.get(n)) for n in (64, 128, 256, 512)]
-    compare("§3 deviations of the stored doubles", "the stored doubles instead\n(", dev[2:])
+    compare("§3 deviations of the stored doubles", "the stored doubles instead (", dev[2:])
     if None not in dev:
         check("NOTES: §3 the stored-double deviations are non-monotone", any(a < b for a, b in zip(dev, dev[1:])), ", ".join(f"{d:.1e}" for d in dev))
 
@@ -1221,7 +1221,7 @@ def notes_s6() -> None:
     if hv is None:
         NOTES_SKIPPED.append("§6 Check 3 (the held-out extrapolation needs n <= 496)")
         return
-    compare("§6 Check 3 train and test ranges", "fitted on\n$n\\in[", [int(x) for x in hv["train_range"] + hv["test_range"]], ints=True)
+    compare("§6 Check 3 train and test ranges", "fitted on $n\\in[", [int(x) for x in hv["train_range"] + hv["test_range"]], ints=True)
     names = {
         "$n^{-1/2}$": "n^-1/2",
         r"$1/\log_2^2 n$": "1/log2^2 n",
@@ -1239,7 +1239,7 @@ def notes_s6() -> None:
     order = [names[k] for k in rows or {} if k in names]
     check("NOTES: §6 Check 3 rows are in held-out order", order == [r["basis"] for r in hv["ranked_bases"]], ", ".join(order))
     b = hv["best_free_exponent"]
-    compare("§6 Check 3 free exponent", "the same way selects\n$p = ", [b["p"], b["A_inf"], abs(b["A_inf"] - 0.75), b["holdout_maxres"]])
+    compare("§6 Check 3 free exponent", "the same way selects $p = ", [b["p"], b["A_inf"], abs(b["A_inf"] - 0.75), b["holdout_maxres"]])
     mark("historical", r"\log_2 n$ as ", 2)
     compare("§6 Check 3 held-out residuals, 4 digits", "and 1.3e−3; the values are ", [byname["n^-1/2"]["holdout_maxres"], byname["n^-1/2 log2 n"]["holdout_maxres"]])
     lg = byname["1/log2 n"]["A_inf"]
