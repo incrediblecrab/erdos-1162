@@ -5,6 +5,10 @@ n= 256 k=  64  |orb|=2: 0.142098  |orb|=4: 0.857902   [check sum m*E = 256.00000
 n= 512 k= 128  |orb|=2: 0.102652  |orb|=4: 0.897348   [check sum m*E = 512.000000, err 1.40e-09]
 
 == Model check: pure orbit types, best rank and excess ==
+n=  64 orbits of size  2: best k/n=0.25000 (pred 0.25000)  excess/(n log2 n)=+0.38574 (pred 0.50000 if n^2 coef is 1/16; pred n^2 coef 0.062500)
+n=  64 orbits of size  4: best k/n=0.25000 (pred 0.25000)  excess/(n log2 n)=+0.46921 (pred 0.75000 if n^2 coef is 1/16; pred n^2 coef 0.062500)
+n=  64 orbits of size  8: best k/n=0.18750 (pred 0.18750)  excess/(n log2 n)=+0.22742 (pred 0.87500 if n^2 coef is 1/16; pred n^2 coef 0.035156)
+n=  64 orbits of size 16: best k/n=0.12500 (pred 0.12500)  excess/(n log2 n)=+0.07203 (pred 0.93750 if n^2 coef is 1/16; pred n^2 coef 0.015625)
 n= 128 orbits of size  2: best k/n=0.25000 (pred 0.25000)  excess/(n log2 n)=+0.39951 (pred 0.50000 if n^2 coef is 1/16; pred n^2 coef 0.062500)
 n= 128 orbits of size  4: best k/n=0.25000 (pred 0.25000)  excess/(n log2 n)=+0.50622 (pred 0.75000 if n^2 coef is 1/16; pred n^2 coef 0.062500)
 n= 128 orbits of size  8: best k/n=0.18750 (pred 0.18750)  excess/(n log2 n)=+0.06632 (pred 0.87500 if n^2 coef is 1/16; pred n^2 coef 0.035156)

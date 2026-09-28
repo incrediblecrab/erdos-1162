@@ -1,5 +1,5 @@
 density-1/2 block types (d = b/2), conjugates per b-set: {2: 1, 4: 4, 8: 105}; their mean log2|Phi| at b=8: 1.0
-EGF of the Frattini-closed family, n <= 512: 1.0s
+EGF of the Frattini-closed family, n <= 512: 1.2s
 
 == gate 0: block weights and subspace identities ==
   [pass] w_4(z) = (z-1)(z-2)(z-4)(z-8) = z^4 - 15z^3 + 70z^2 - 120z + 64
@@ -150,5 +150,5 @@ EGF of the Frattini-closed family, n <= 512: 1.0s
 == conjectured formula vs A005432, n <= 18 (pre-asymptotic; information only) ==
   f(n) / conjecture: 2:1.00  3:0.75  4:0.86  5:0.69  6:1.21  7:0.92  8:1.40  9:1.22  10:1.82  11:1.45  12:2.10  13:1.74  14:2.24  15:1.90  16:2.27  17:1.95  18:2.19
 
-wrote data/block_families.json  (4.4s)
+wrote data/block_families.json  (5.3s)
 all gates passed
