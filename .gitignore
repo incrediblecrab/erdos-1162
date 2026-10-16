@@ -12,3 +12,10 @@ results/fetch.log
 src/subgroups
 
 __pycache__/
+
+# Local environment files can hold credentials; committed templates stay tracked.
+.env
+.env.*
+!.env.example
+!.env.template
+!.env.sample
